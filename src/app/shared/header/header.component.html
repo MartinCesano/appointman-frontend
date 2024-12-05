@@ -1,9 +1,11 @@
-<nav class="navbar bg-primary">
+<header class="navbar bg-primary">
   <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center w-100">
-      <!-- Botón de hamburguesa a la izquierda -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      
+      <!-- Botón de hamburguesa -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" 
+        aria-controls="offcanvasNavbar" aria-label="Toggle navigation"> 
+        <!-- data-bs-target="#offcanvasNavbar" apunta al id del nav en app navbar  -->
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -24,18 +26,7 @@
   </div>
 
   <!-- Menú Offcanvas -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Opciones</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Generar opciones de forma dinámica</a>
-        </li>
-        <!-- Aquí puedes añadir más elementos dinámicos si lo deseas -->
-      </ul>
-    </div>
-  </div>
-</nav>
+  <app-navbar></app-navbar>
+
+
+</header>
