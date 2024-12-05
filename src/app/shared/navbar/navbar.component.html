@@ -1,8 +1,10 @@
 <nav class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-  <div class="offcanvas-header justify-content-between">
-    <button type="button" class="btn-close me-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    <h5 class="offcanvas-title flex-grow-1 text-center text-dark" id="offcanvasNavbarLabel">Opciones</h5>
-  </div>
+  <div class="offcanvas-header d-flex align-items-center border-bottom border-primary p-3">
+    <button type="button" class="btn-close me-2 text-primary" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <h5 class="offcanvas-title flex-grow-1 text-center text-primary" id="offcanvasNavbarLabel">Opciones</h5>
+</div>
+
+
   <div class="offcanvas-body">
     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
       <li *ngFor="let option of options" class="nav-item">
