@@ -8,20 +8,16 @@
       </button>
 
       <!-- Logo y Nombre -->
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center ms-2"> <!-- Agregamos ms-2 para espacio -->
         <img src="appointman-logo.png" alt="Logo" width="40" height="40" class="me-2">
         <span class="fs-4 fw-bold">Appointman</span>
       </div>
 
       <!-- Opciones de Usuario -->
-      <div>
-        <div *ngIf="isLoggedIn" class="d-flex align-items-center">
-          <!-- Aquí puedes mostrar la imagen de perfil o nombre de usuario -->
-        </div>
-
-        <div *ngIf="!isLoggedIn" class="d-flex">
-          <a href="/login" class="btn btn-outline-light btn-sm me-2">Iniciar sesión</a>
-          <a href="/register" class="btn btn-light btn-sm">Registrarse</a>
+      <div class="d-flex flex-column flex-sm-row align-items-center ms-2"> <!-- Cambié flex-column para vista móvil -->
+        <div *ngIf="!isLoggedIn" class="d-flex mt-2 mt-sm-0"> <!-- Añadí mt-2 para dar margen arriba en móvil -->
+          <button class="btn btn-outline-light btn-sm me-2">Iniciar sesión</button>
+          <button class="btn btn-light btn-sm w-auto">Registrarse</button>
         </div>
       </div>
     </div>
@@ -34,7 +30,7 @@
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
+      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Generar opciones de forma dinámica</a>
         </li>
