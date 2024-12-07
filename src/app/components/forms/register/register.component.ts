@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { atLeastOneRequiredValidator, birthDateValidator, passwordsMatchValidator } from '../../../validators/validators';
 
 @Component({
   selector: 'app-register',
@@ -16,37 +17,27 @@ export class RegisterComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router
   ) {
     this.registerForm = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.email]],
-        telefono: ['', [Validators.required]],
-        contrasena: ['', [Validators.required, Validators.minLength(6)]],
-        confirmarcontrasena: ['', [Validators.required]],
-        roles: ['', [Validators.required]],
-        nombre: ['', [Validators.required]],
-        apellido: ['', [Validators.required]],
-        fechaNacimiento: ['', [Validators.required]],
-        tipoDocumento: ['', [Validators.required]],
-        documento: ['', [Validators.required]],
+        nombre: ['', Validators.required],
+        apellido: ['', Validators.required],
+        fechaNacimiento: ['', Validators.required ],
+        tipoDocumento: ['', Validators.required],
+        documento: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+        email: ['', Validators.email],
+        telefono: ['', Validators.pattern(/^\+?\d{7,15}$/)],
+        contrasena: ['', [Validators.required, Validators.minLength(8)]],
+        confirmarcontrasena: ['', Validators.required],
       },
       {
-        validators: this.passwordsMatchValidator, // Validación de contraseñas
+        validators: [atLeastOneRequiredValidator, passwordsMatchValidator, birthDateValidator],
       }
     );
   }
 
-  // Validador personalizado para comprobar que las contraseñas coinciden
-  passwordsMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
-    const contrasena = group.get('contrasena')?.value;
-    const confirmarcontrasena = group.get('confirmarcontrasena')?.value;
-    if (contrasena && confirmarcontrasena && contrasena !== confirmarcontrasena) {
-      return { contrasenaMismatch: true }; // Usa 'contrasenaMismatch' como error
-    }
-    return null;
-  }
 
   formatFecha(fecha: string): string {
     const date = new Date(fecha);
@@ -72,6 +63,9 @@ export class RegisterComponent {
     console.log(this.registerForm.value);
 
     try {
+      if (!this.registerForm.valid) {
+        throw new Error('El formulario no es válido. Por favor, revise los campos e intente nuevamente.');
+      }
       await this.authService.register(registerDTO);
       alert('Registro exitoso');
       this.router.navigate(['/login']);
