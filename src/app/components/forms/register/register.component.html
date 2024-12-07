@@ -11,47 +11,43 @@
 
                 <!-- Formulario de registro -->
                 <div class="row mb-4">
-                    <form>
+                    <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                         <div class="row">
                             <!-- Columna Izquierda -->
                             <div class="col-md-6">
-                                <!-- Campo Email o Teléfono -->
+                                <!-- Campo Email -->
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Email</label>
-                                    <input type="text" name="username" id="username" class="form-control"
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" id="email" formControlName="email" class="form-control"
                                         placeholder="email@ejemplo.com " required>
                                 </div>
                                 <!-- Campo Teléfono -->
                                 <div class="mb-3">
                                     <label for="telefono" class="form-label">Teléfono</label>
-                                    <input type="text" name="telefono" id="telefono" class="form-control"
+                                    <input type="text" id="telefono" formControlName="telefono" class="form-control"
                                         placeholder="+54 1234567890" required>
                                 </div>
 
                                 <!-- Campo Contraseña -->
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Contraseña</label>
-                                    <input type="password" name="password" id="password" class="form-control"
-                                        placeholder="contraseña" required>
+                                    <label for="contrasena" class="form-label">Contraseña</label>
+                                    <input type="password" id="contrasena" formControlName="contrasena"
+                                        class="form-control" placeholder="Contraseña" required>
                                 </div>
 
                                 <!-- Campo Confirmar Contraseña -->
                                 <div class="mb-3">
-                                    <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-                                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
-                                        placeholder="contraseña" required>
+                                    <label for="confirmarcontrasena" class="form-label">Confirmar Contraseña</label>
+                                    <input type="password" id="confirmarcontrasena"
+                                        formControlName="confirmarcontrasena" class="form-control"
+                                        placeholder="Confirmar contraseña" required>
                                 </div>
 
-                                <!-- Campo Roles -->
-                                <div class="mb-3">
-                                    <label for="roles" class="form-label">Roles</label>
-                                    <select name="roles" id="roles" class="form-control" required>
-                                        <option value="empleado">Empleado</option>
-                                        <option value="cliente">Cliente</option>
-                                        <!-- Añadir más roles si es necesario -->
-                                    </select>
+                                <!-- Mensaje de error si las contraseñas no coinciden -->
+                                <div *ngIf="registerForm.hasError('contrasenaMismatch')" class="alert alert-danger">
+                                    Las contraseñas no coinciden
                                 </div>
-                                
+                             
                             </div>
 
                             <!-- Columna Derecha -->
@@ -59,41 +55,40 @@
                                 <!-- Campo Nombre -->
                                 <div class="mb-3">
                                     <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" name="nombre" id="nombre" class="form-control"
+                                    <input type="text" id="nombre" formControlName="nombre" class="form-control"
                                         placeholder="Tu nombre" required>
                                 </div>
 
                                 <!-- Campo Apellido -->
                                 <div class="mb-3">
                                     <label for="apellido" class="form-label">Apellido</label>
-                                    <input type="text" name="apellido" id="apellido" class="form-control"
+                                    <input type="text" id="apellido" formControlName="apellido" class="form-control"
                                         placeholder="Tu apellido" required>
                                 </div>
                                 <!-- Campo Fecha de Nacimiento (Cliente) -->
                                 <div class="mb-3">
                                     <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                                    <input type="date" name="fechaNacimiento" id="fechaNacimiento" class="form-control"
-                                        required>
+                                    <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento"
+                                        class="form-control" required>
                                 </div>
 
                                 <!-- Campo Tipo de Documento -->
                                 <div class="mb-3">
                                     <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
-                                    <select name="tipoDocumento" id="tipoDocumento" class="form-control" required>
+                                    <select id="tipoDocumento" formControlName="tipoDocumento" class="form-control"
+                                        required>
                                         <option value="dni">DNI</option>
                                         <option value="pasaporte">Pasaporte</option>
-                                        <option value="cuil">CUIL</option>
-                                        <!-- Añadir más tipos de documentos si es necesario -->
                                     </select>
                                 </div>
 
                                 <!-- Campo Documento (Cliente) -->
                                 <div class="mb-3">
                                     <label for="documento" class="form-label">Número de Documento</label>
-                                    <input type="number" name="documento" id="documento" class="form-control"
+                                    <input type="number" id="documento" formControlName="documento" class="form-control"
                                         placeholder="Número de Documento" required>
                                 </div>
-                               
+
                             </div>
                         </div>
 
