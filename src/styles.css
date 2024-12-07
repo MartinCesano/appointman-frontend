@@ -5,19 +5,19 @@
   --bs-secondary: rgb(var(--bs-secondary-rgb));
 }
 
+
 .btn-primary {
   background-color: var(--bs-primary);
   border-color: var(--bs-primary);
 }
 
 .btn-primary:hover {
-  background-color: darken(var(--bs-primary));
-  border-color: #000;
-  color: #000;
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
 }
 
 .btn-primary:active {
-  background-color:  #000, !important;
+  background-color:  #000;
   border-color: #000;
 }
 

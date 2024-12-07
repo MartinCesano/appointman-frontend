@@ -23,7 +23,7 @@ export class HeaderComponent {
   constructor(private router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.isLoginPage = event.url === '/login';
+        this.isLoginPage = event.url === '/login' || event.url === '/register';
       }
     });
   }
