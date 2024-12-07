@@ -14,6 +14,7 @@ import { atLeastOneRequiredValidator, birthDateValidator, passwordsMatchValidato
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
+  submitted = false; 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +49,7 @@ export class RegisterComponent {
   }
   // Método que se ejecuta al enviar el formulario
   async onSubmit() {
+    this.submitted = true;
 
     const registerDTO = {
       email: this.registerForm.value.email,

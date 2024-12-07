@@ -19,9 +19,8 @@
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="text" id="email" formControlName="email" class="form-control"
-                                        placeholder="email@ejemplo.com " />
-                                    <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-                                        class="text-danger">
+                                        placeholder="email@ejemplo.com" />
+                                    <div *ngIf="submitted && registerForm.get('email')?.invalid" class="text-danger">
                                         El email no es válido.
                                     </div>
                                 </div>
@@ -31,8 +30,7 @@
                                     <label for="telefono" class="form-label">Teléfono</label>
                                     <input type="text" id="telefono" formControlName="telefono" class="form-control"
                                         placeholder="+54 1234567890" />
-                                    <div *ngIf="registerForm.get('telefono')?.invalid && registerForm.get('telefono')?.touched"
-                                        class="text-danger">
+                                    <div *ngIf="submitted && registerForm.get('telefono')?.invalid" class="text-danger">
                                         El teléfono debe ser un número válido.
                                     </div>
                                 </div>
@@ -42,9 +40,13 @@
                                     <label for="contrasena" class="form-label">Contraseña</label>
                                     <input type="password" id="contrasena" formControlName="contrasena"
                                         class="form-control" placeholder="Contraseña" />
-                                    <div *ngIf="registerForm.get('contrasena')?.invalid && registerForm.get('contrasena')?.touched"
+                                    <div *ngIf="submitted && registerForm.get('contrasena')?.hasError('required')"
                                         class="text-danger">
-                                        La contraseña es obligatoria y debe tener al menos 8 caracteres.
+                                        La contraseña es obligatoria.
+                                    </div>
+                                    <div *ngIf="submitted && registerForm.get('contrasena')?.hasError('minlength')"
+                                        class="text-danger">
+                                        La contraseña debe tener al menos 8 caracteres.
                                     </div>
                                 </div>
 
@@ -54,8 +56,13 @@
                                     <input type="password" id="confirmarcontrasena"
                                         formControlName="confirmarcontrasena" class="form-control"
                                         placeholder="Confirmar contraseña" />
+                                    <div *ngIf="submitted && registerForm.get('confirmarcontrasena')?.hasError('required')"
+                                        class="text-danger">
+                                        La confirmación de la contraseña es obligatoria.
+                                    </div>
                                 </div>
-                                <div *ngIf="registerForm.hasError('contrasenaMismatch')" class="text-danger">
+                                <div *ngIf="submitted && registerForm.hasError('contrasenaMismatch')"
+                                    class="text-danger">
                                     Las contraseñas no coinciden.
                                 </div>
                             </div>
@@ -67,8 +74,7 @@
                                     <label for="nombre" class="form-label">Nombre</label>
                                     <input type="text" id="nombre" formControlName="nombre" class="form-control"
                                         placeholder="Tu nombre" />
-                                    <div *ngIf="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched"
-                                        class="text-danger">
+                                    <div *ngIf="submitted && registerForm.get('nombre')?.invalid" class="text-danger">
                                         El nombre es obligatorio.
                                     </div>
                                 </div>
@@ -78,8 +84,7 @@
                                     <label for="apellido" class="form-label">Apellido</label>
                                     <input type="text" id="apellido" formControlName="apellido" class="form-control"
                                         placeholder="Tu apellido" />
-                                    <div *ngIf="registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched"
-                                        class="text-danger">
+                                    <div *ngIf="submitted && registerForm.get('apellido')?.invalid" class="text-danger">
                                         El apellido es obligatorio.
                                     </div>
                                 </div>
@@ -89,13 +94,14 @@
                                     <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
                                     <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento"
                                         class="form-control" />
-                                    <div *ngIf="registerForm.get('fechaNacimiento')?.invalid && registerForm.get('fechaNacimiento')?.touched"
+                                    <div *ngIf="submitted && registerForm.get('fechaNacimiento')?.invalid"
                                         class="text-danger">
                                         La fecha de nacimiento es obligatoria.
                                     </div>
-                                    <div *ngIf="registerForm.hasError('invalidBirthDate') && registerForm.get('fechaNacimiento')?.touched" class="text-danger">
+                                    <div *ngIf="submitted && registerForm.hasError('invalidBirthDate')"
+                                        class="text-danger">
                                         La fecha de nacimiento debe ser menor o igual a la fecha actual.
-                                      </div>
+                                    </div>
                                 </div>
 
                                 <!-- Campo Tipo de Documento -->
@@ -105,7 +111,7 @@
                                         <option value="dni">DNI</option>
                                         <option value="pasaporte">Pasaporte</option>
                                     </select>
-                                    <div *ngIf="registerForm.get('tipoDocumento')?.invalid && registerForm.get('tipoDocumento')?.touched"
+                                    <div *ngIf="submitted && registerForm.get('tipoDocumento')?.invalid"
                                         class="text-danger">
                                         El tipo de documento es obligatorio.
                                     </div>
@@ -116,7 +122,7 @@
                                     <label for="documento" class="form-label">Número de Documento</label>
                                     <input type="number" id="documento" formControlName="documento" class="form-control"
                                         placeholder="Número de Documento" />
-                                    <div *ngIf="registerForm.get('documento')?.invalid && registerForm.get('documento')?.touched"
+                                    <div *ngIf="submitted && registerForm.get('documento')?.invalid"
                                         class="text-danger">
                                         El número de documento es obligatorio y debe ser numérico.
                                     </div>
@@ -125,7 +131,8 @@
                         </div>
 
                         <!-- Errores generales -->
-                        <div *ngIf="registerForm.hasError('atLeastOneRequired')" class="alert alert-danger">
+                        <div *ngIf="submitted && registerForm.hasError('atLeastOneRequired')"
+                            class="alert alert-danger">
                             Debe proporcionar al menos un email o un número de teléfono.
                         </div>
 
