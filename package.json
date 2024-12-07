@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "node env-config.js",
     "start": "ng serve",
+    "prebuild": "node env-config.js",
     "build": "ng build",
     "start:dev": "ng serve --watch --configuration development",
     "test": "ng test",
@@ -21,7 +23,9 @@
     "@angular/platform-server": "^18.1.0",
     "@angular/router": "^18.1.0",
     "@angular/ssr": "^18.1.4",
+    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -42,5 +46,4 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
   }
-  
 }
