@@ -8,7 +8,6 @@ import { LoginDTO } from '../../models/login.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TokenDTO } from '../../models/token.dto';
 import { UsuarioDTO } from '../../models/usuario.dt';
-import { UsuarioService } from '../services/usuario.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +19,22 @@ export class AuthService {
   // Observable público para que los componentes lo observen
   usuarioActual$: Observable<UsuarioDTO | null> = this.usuarioActualSubject.asObservable();
 
-  constructor(
+  constructor() {
+    this.restoreSession(); // Restaurar sesión al inicializar
+  }
 
-  ) { }
+  private async restoreSession(): Promise<void> {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const usuario = await this.getUser(); // Obtén los datos del usuario
+        this.setUsuarioActual(usuario);
+      } catch (error) {
+        console.error('Error al restaurar la sesión:', error);
+        this.logout();
+      }
+    }
+  }
 
   async register(body: RegisterDTO): Promise<void> {
     try {
