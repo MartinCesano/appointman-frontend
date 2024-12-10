@@ -12,4 +12,12 @@
       </li>
     </ul>
   </div>
+  <div class="offcanvas-body d-flex flex-column">
+    <div *ngIf="usuarioActual" class="d-flex align-items-center mt-auto">
+      <a class="btn w-100 text-start mx-2 mb-2 border-0 border-bottom hover-btn-nav" (click)="logout()">
+        <i class="bi bi-box-arrow-right me-2"></i> <!-- Ícono de salir -->
+        Cerrar sesión
+      </a>
+    </div>
+  </div>
 </nav>

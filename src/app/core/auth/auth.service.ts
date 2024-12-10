@@ -2,31 +2,50 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { RegisterDTO } from '../../models/register.dto';
 import axios from 'axios';
-import { BehaviorSubject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
 import moment from 'moment';
 import { LoginDTO } from '../../models/login.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TokenDTO } from '../../models/token.dto';
+import { UsuarioDTO } from '../../models/usuario.dt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  // Sujeto privado para controlar el estado
+  private usuarioActualSubject = new BehaviorSubject<UsuarioDTO | null>(null);
 
-  private loggedInSubject = new BehaviorSubject<boolean>(false); // Estado inicial: no logueado
-  public loggedIn$ = this.loggedInSubject.asObservable(); // Observable para que otros componentes puedan suscribirse
+  // Observable público para que los componentes lo observen
+  usuarioActual$: Observable<UsuarioDTO | null> = this.usuarioActualSubject.asObservable();
 
+  constructor() {
+    this.restoreSession(); // Restaurar sesión al inicializar
+  }
 
-  constructor(
-    
-  ) { }
+  private async restoreSession(): Promise<void> {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      // Si no estás en el navegador, no intentes restaurar la sesión
+      return;
+    }
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const usuario = await this.getUser(); // Obtén los datos del usuario
+        this.setUsuarioActual(usuario);
+      } catch (error) {
+        alert('Error al restaurar la sesión:');
+        this.logout();
+      }
+    }
+  }
 
   async register(body: RegisterDTO): Promise<void> {
     try {
       const response = await axios.post(`${environment.apiUrl}/auth/register`, body);
       return response.data;
     } catch (error) {
-      console.error('Error al registrarse:', error);
+      alert('Error al registrarse');
       throw error
     }
   }
@@ -37,12 +56,13 @@ export class AuthService {
       localStorage.setItem('token', JSON.stringify(response.data));
       this.scheduleTokenRefresh(response.data.expirationTime);
       this.isTokenValid();
-      this.loggedInSubject.next(true); // Notificar que el usuario está logueado
+      const usuario = await this.getUser();
+      this.setUsuarioActual(usuario);
       return response.data;
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      console.error('Error al loguearse:', error);
+      alert('Error al loguearse');
       throw error
     }
   }
@@ -50,7 +70,19 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    this.loggedInSubject.next(false);
+    this.setUsuarioActual(null);
+    
+  }
+
+
+  // Método para actualizar el estado del usuario
+  setUsuarioActual(usuario: UsuarioDTO | null): void {
+    this.usuarioActualSubject.next(usuario);
+  }
+
+  // Método para obtener el valor actual del usuario
+  getUsuarioActual(): UsuarioDTO | null {
+    return this.usuarioActualSubject.value;
   }
 
   async refreshToken() {
@@ -131,6 +163,28 @@ export class AuthService {
     const token = localStorage.getItem('token');
     const isLogged = !!token;
     return isLogged;
+  }
+
+  async getUser(): Promise<UsuarioDTO | null> {
+    const tokenString = localStorage.getItem('token');
+    if (!tokenString) {
+      return null; // Si no hay token, no hay usuario
+    }
+    
+    const tokenObject = JSON.parse(tokenString);
+    try {
+      const response = await axios.get(`${environment.apiUrl}/usuario/me`, {
+        headers: {
+          Authorization: `Bearer ${tokenObject.accessToken}`,
+        }
+      });
+      // Guardamos la información del usuario en el localStorage
+      localStorage.setItem('user', JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener los datos del usuario:', error);
+      return null;
+    }
   }
 }
 
