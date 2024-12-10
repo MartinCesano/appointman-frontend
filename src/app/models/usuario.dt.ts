@@ -1,25 +1,25 @@
 // user.dto.ts
 
-export interface RoleDTO {
+export interface RolDTO {
     id: number;
     nombre: string;
-    permisos: PermissionDTO[];
+    permisos: PermisoDTO[];
   }
   
-  export interface PermissionDTO {
+  export interface PermisoDTO {
     codigo: number;
     nombre: string;
     authority: string;
   }
   
-  export interface UserDTO {
+  export interface UsuarioDTO {
     id: number;
     nombre: string;
     apellido: string;
     email: string;
     telefono: string;
     fechaNacimiento: string;
-    roles: RoleDTO[];
+    roles: RolDTO[];
     username: string;
     enabled: boolean;
     accountNonLocked: boolean;

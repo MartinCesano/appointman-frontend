@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { RegisterDTO } from '../../models/register.dto';
-import axios  from 'axios';
-import { timer } from 'rxjs';
+import axios from 'axios';
+import { BehaviorSubject, timer } from 'rxjs';
 import moment from 'moment';
 import { LoginDTO } from '../../models/login.dto';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -13,10 +13,14 @@ import { TokenDTO } from '../../models/token.dto';
 })
 export class AuthService {
 
-  
+  private loggedInSubject = new BehaviorSubject<boolean>(false); // Estado inicial: no logueado
+  public loggedIn$ = this.loggedInSubject.asObservable(); // Observable para que otros componentes puedan suscribirse
 
-  constructor() { }
-  
+
+  constructor(
+    
+  ) { }
+
   async register(body: RegisterDTO): Promise<void> {
     try {
       const response = await axios.post(`${environment.apiUrl}/auth/register`, body);
@@ -27,19 +31,28 @@ export class AuthService {
     }
   }
 
-  async login (body: LoginDTO): Promise<void> {
+  async login(body: LoginDTO): Promise<void> {
     try {
       const response = await axios.post(`${environment.apiUrl}/auth/login`, body);
       localStorage.setItem('token', JSON.stringify(response.data));
       this.scheduleTokenRefresh(response.data.expirationTime);
       this.isTokenValid();
+      this.loggedInSubject.next(true); // Notificar que el usuario está logueado
       return response.data;
     } catch (error) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       console.error('Error al loguearse:', error);
       throw error
     }
   }
-  
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.loggedInSubject.next(false);
+  }
+
   async refreshToken() {
     const tokenObject = JSON.parse(localStorage.getItem('token') ?? '{"refreshToken":""}');
     try {
@@ -54,15 +67,12 @@ export class AuthService {
       tokenObject.expirationTime = response.expirationTime;
       localStorage.setItem('token', JSON.stringify(tokenObject));
       this.scheduleTokenRefresh(response.expirationTime); // Ejecuta la función del refresh token para iniciar un nuevo ciclo
-    }  catch (error) {
+    } catch (error) {
       alert('Error al refrescar el token');
       throw new HttpErrorResponse({ error });
     }
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-  }
 
   private scheduleTokenRefresh(expirationTime: string): void {
     const currentTime = moment();
@@ -78,7 +88,7 @@ export class AuthService {
     }
   }
 
-  public initializeTokenRefresh(): void { 
+  public initializeTokenRefresh(): void {
     const tokenString = localStorage.getItem('token'); // Obtiene el token del local storage
     if (tokenString) {
       const tokenObject = JSON.parse(tokenString) as TokenDTO; // Lo transforma a objeto
@@ -114,13 +124,13 @@ export class AuthService {
   }
 
 
-  async isLogged(): Promise<boolean> {
-    const tokenString = localStorage.getItem('token');
-    if (!tokenString) {
-      return false;
+  isLoggedIn(): boolean {
+    if (typeof localStorage === 'undefined') {
+      return false; // localStorage no está disponible
     }
-    const tokenObject = JSON.parse(tokenString) as TokenDTO;
-    return !!tokenObject.accessToken;
+    const token = localStorage.getItem('token');
+    const isLogged = !!token;
+    return isLogged;
   }
 }
 
