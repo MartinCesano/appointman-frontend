@@ -53,10 +53,7 @@ export class HeaderComponent {
     }
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.authService.setUsuarioActual(null); // Asegurarse de notificar que no hay usuario
-  }
+  
   openLogin(): void { 
     this.router.navigate(['/login']);
   }
