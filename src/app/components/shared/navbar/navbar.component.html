@@ -10,6 +10,8 @@
       <li *ngFor="let option of options" class="nav-item">
         <a class="btn w-100 text-start mx-2 mb-2 border-0 border-bottom hover-btn-nav" [routerLink]="option.link">{{ option.label }}</a>
       </li>
+      <li *ngIf="isLoggedIn" class="nav-item">
+        <a class="btn w-100 text-start mx-2 mb-2 border-0 border-bottom hover-btn-nav" (click)="logout()">Cerrar sesión</a>
     </ul>
   </div>
 </nav>

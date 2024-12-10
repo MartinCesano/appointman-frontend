@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { NavigationEnd, RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/auth/auth.service';
-import { UsuarioService } from '../../core/services/usuario.service';
-import { UsuarioDTO } from '../../models/usuario.dt';
+import { AuthService } from '../../../core/auth/auth.service';
+import { UsuarioService } from '../../../core/services/usuario.service';
+import { UsuarioDTO } from '../../../models/usuario.dt';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,15 +20,15 @@ import { Subscription } from 'rxjs';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  private authSubscription!: Subscription; // Subscripción para manejar el observable
   isLoggedIn: boolean = false;
   isLoginPage = true;
-  usuarioActual: UsuarioDTO | null = null;
+  usuarioActual: UsuarioDTO | null = null; // Aquí se reflejarán los cambios
+  private subscription: Subscription = new Subscription(); // Para manejar la suscripción
+
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private usuarioService: UsuarioService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -36,22 +36,27 @@ export class HeaderComponent {
       }
     });
   }
-
-  async ngOnInit(): Promise<void> {
-    this.authSubscription = this.authService.loggedIn$.subscribe((loggedIn) => {
-      this.isLoggedIn = this.authService.isLoggedIn();
-    });
-    if (this.isLoggedIn) {
-      this.usuarioActual = await this.usuarioService.getUser();
-    }
-  }
-  ngOnDestroy() {
-    // Cancelar la suscripción para evitar fugas de memoria
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  ngOnInit(): void {
+    // Suscribirse al observable para escuchar los cambios
+    this.subscription = this.authService.usuarioActual$.subscribe(
+      (usuario) => {
+        this.usuarioActual = usuario; // Actualizar la variable según los cambios
+        console.log('Usuario actual:', this.usuarioActual);
+      }
+    );
   }
 
+  ngOnDestroy(): void {
+    // Asegurarse de limpiar la suscripción
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.authService.setUsuarioActual(null); // Asegurarse de notificar que no hay usuario
+  }
   openLogin(): void { 
     this.router.navigate(['/login']);
   }
@@ -60,10 +65,6 @@ export class HeaderComponent {
     this.router.navigate(['/register']);
   }
 
-  logout(): void {
-    this.authService.logout();  
-    this.router.navigate(['/login']);
-  }
 }
 
 
