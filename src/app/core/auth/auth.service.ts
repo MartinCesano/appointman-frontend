@@ -28,6 +28,7 @@ export class AuthService {
   async login (body: LoginDTO): Promise<void> {
     try {
       const response = await axios.post(`${environment.apiUrl}/auth/login`, body);
+      localStorage.setItem('token', JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       console.error('Error al loguearse:', error);
