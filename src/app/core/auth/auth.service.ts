@@ -13,6 +13,8 @@ import { TokenDTO } from '../../models/token.dto';
 })
 export class AuthService {
 
+  
+
   constructor() { }
   
   async register(body: RegisterDTO): Promise<void> {
@@ -29,6 +31,8 @@ export class AuthService {
     try {
       const response = await axios.post(`${environment.apiUrl}/auth/login`, body);
       localStorage.setItem('token', JSON.stringify(response.data));
+      this.scheduleTokenRefresh(response.data.expirationTime);
+      this.isTokenValid();
       return response.data;
     } catch (error) {
       console.error('Error al loguearse:', error);
@@ -40,7 +44,7 @@ export class AuthService {
     const tokenObject = JSON.parse(localStorage.getItem('token') ?? '{"refreshToken":""}');
     try {
       const response = (
-        await axios.get(`${environment.apiUrl}/auth/refresh-token`, {
+        await axios.get(`'${environment.apiUrl}/auth/refresh-token'`, {
           headers: {
             'refresh-token': tokenObject.refreshToken,
           },
@@ -70,7 +74,7 @@ export class AuthService {
         await this.refreshToken();
       });
     } else {
-      console.error('Expiration time is in the past');
+      console.error('El token está expirado');
     }
   }
 
@@ -92,12 +96,31 @@ export class AuthService {
     }
     const tokenObject = JSON.parse(tokenString) as TokenDTO;
     try {
-      const response = await axios.post(`${environment.apiUrl}/auth/authorization`, {
-        token: tokenObject.accessToken,
-      });
+      console.log('Validando token');
+      const response = await axios.get(
+        `${environment.apiUrl}/auth/validar`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenObject.accessToken}`,
+          },
+        }
+      );
+      console.log('Es valido token');
       return response.data.valid;
     } catch (error) {
+      console.error('Error al validar el token:', error);
       return false;
     }
   }
+
+
+  async isLogged(): Promise<boolean> {
+    const tokenString = localStorage.getItem('token');
+    if (!tokenString) {
+      return false;
+    }
+    const tokenObject = JSON.parse(tokenString) as TokenDTO;
+    return !!tokenObject.accessToken;
+  }
 }
+
