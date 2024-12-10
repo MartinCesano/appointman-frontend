@@ -41,7 +41,6 @@ export class HeaderComponent {
     this.subscription = this.authService.usuarioActual$.subscribe(
       (usuario) => {
         this.usuarioActual = usuario; // Actualizar la variable según los cambios
-        console.log('Usuario actual:', this.usuarioActual);
       }
     );
   }

@@ -30,7 +30,7 @@ export class UsuarioService {
       localStorage.setItem('user', JSON.stringify(response.data));
       return response.data;
     } catch (error) {
-      console.error('Error al obtener los datos del usuario:', error);
+      alert('Error al obtener los datos del usuario:');
       return null;
     }
   }

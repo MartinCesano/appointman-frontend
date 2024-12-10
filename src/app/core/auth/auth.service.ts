@@ -24,13 +24,17 @@ export class AuthService {
   }
 
   private async restoreSession(): Promise<void> {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      // Si no estás en el navegador, no intentes restaurar la sesión
+      return;
+    }
     const token = localStorage.getItem('token');
     if (token) {
       try {
         const usuario = await this.getUser(); // Obtén los datos del usuario
         this.setUsuarioActual(usuario);
       } catch (error) {
-        console.error('Error al restaurar la sesión:', error);
+        alert('Error al restaurar la sesión:');
         this.logout();
       }
     }
@@ -41,7 +45,7 @@ export class AuthService {
       const response = await axios.post(`${environment.apiUrl}/auth/register`, body);
       return response.data;
     } catch (error) {
-      console.error('Error al registrarse:', error);
+      alert('Error al registrarse');
       throw error
     }
   }
@@ -58,7 +62,7 @@ export class AuthService {
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      console.error('Error al loguearse:', error);
+      alert('Error al loguearse');
       throw error
     }
   }
