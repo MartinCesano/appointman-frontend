@@ -71,8 +71,8 @@ export class RegisterComponent {
       await this.authService.register(registerDTO);
       alert('Registro exitoso');
       this.router.navigate(['/login']);
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      alert(error.error.message);
     }
   }
 }
