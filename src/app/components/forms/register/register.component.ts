@@ -59,7 +59,7 @@ export class RegisterComponent {
       telefono: this.registerForm.value.telefono,
       rol: ["cliente"],
       fechaNacimiento: this.formatFecha(this.registerForm.value.fechaNacimiento),
-      tipoDocumento: this.registerForm.value.tipoDocumento.toLowerCase(),
+      tipoDocumento: this.registerForm.value.tipoDocumento.toUpperCase(),
       documento: this.registerForm.value.documento,
     };
     console.log(this.registerForm.value);
