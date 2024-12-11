@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'http://localhost:8081',
+  apiUrl:  process.env['API_URL_DEV'],
 };
