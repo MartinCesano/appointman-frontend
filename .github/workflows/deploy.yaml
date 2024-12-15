@@ -1,32 +1,47 @@
-name: Desplegar en Azure
+name: Build and Deploy Angular App
 
 on:
   push:
     branches:
-      - main  # Ejecutar solo en la rama main
+      - main  # Se ejecutará solo en la rama principal
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # El entorno donde se ejecutará el trabajo
 
     steps:
-    - name: Obtener el código del repositorio
-      uses: actions/checkout@v2
+      # Paso 1: Descargar el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Configurar Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
+      # Paso 2: Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # La versión mínima requerida por Angular CLI
 
-    - name: Instalar dependencias
-      run: npm install
+      # Paso 3: Configurar las variables de entorno desde los secrets de GitHub
+      - name: Set environment variables
+        run: echo "API_URL_PROD=${{ secrets.API_URL_PROD }}" >> $GITHUB_ENV  # Cargar el secreto
 
-    - name: Construir la aplicación Angular
-      run: npm run build --prod
+      # Paso 4: Instalar las dependencias del proyecto
+      - name: Install dependencies
+        run: npm install
 
-    - name: Desplegar a Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-        package: './dist/appointman-frontend'
+      # Paso 5: Ejecutar el script que genera el archivo de configuración de entornos
+      - name: Generate environment config
+        run: node env-config.js  # Ejecutar el script para generar el archivo environment.ts
+
+      # Paso 6: Ejecutar el build de Angular
+      - name: Run build
+        run: npm run build  # Construir la aplicación con Angular CLI
+
+      # Paso 7: (Opcional) Desplegar la aplicación a Azure, si ya tienes configurado el despliegue en Azure
+      # Aquí iría el paso para hacer el despliegue, por ejemplo usando Azure Web App Deployment
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'nombre-de-tu-app-en-azure'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # Secreto con el perfil de publicación de Azure
+          package: ./dist  # Ruta a la carpeta de salida del build
+
