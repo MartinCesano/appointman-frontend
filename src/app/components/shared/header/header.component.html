@@ -1,0 +1,37 @@
+<header class="navbar bg-primary">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center w-100">
+
+      <!-- Botón de hamburguesa solo si no estamos en la página de login -->
+      <button *ngIf="!isLoginPage" class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Logo y Nombre -->
+      <div class="d-flex align-items-center ms-2">
+        <img src="appointman-logo.png" alt="Logo" width="40" height="40" class="me-2">
+        <span class="fs-4 fw-bold">Appointman</span>
+      </div>
+      <button *ngIf="isLoginPage" class="btn btn-outline-light btn-sm me-2" [routerLink]="'/home'">
+        Volver al inicio</button>
+      <!-- Opciones de Usuario solo si no estamos en la página de login -->
+      <div *ngIf="!isLoginPage " class="d-flex flex-column flex-sm-row align-items-center ms-2">
+        <div *ngIf="!usuarioActual" class="d-flex mt-2 mt-sm-0">
+          <button class="btn btn-outline-light btn-sm me-2" (click)="openLogin()">Iniciar sesión</button>
+          <button class="btn btn-light btn-sm w-auto" (click)="openRegister()">Registrarse</button>
+        </div>
+        
+        <div *ngIf="usuarioActual" class="d-flex align-items-center">
+          <span class="text-light me-2">{{ usuarioActual.nombre }} {{ usuarioActual.apellido }}</span>
+          <i class="bi bi-person text-light me-2"></i>
+        </div>
+        
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú Offcanvas solo si no estamos en la página de login -->
+  <app-navbar *ngIf="!isLoginPage"></app-navbar>
+</header>

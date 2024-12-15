@@ -1,0 +1,23 @@
+<nav class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header d-flex align-items-center border-bottom border-primary p-3">
+    <button type="button" class="btn-close me-2 text-primary" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <h5 class="offcanvas-title flex-grow-1 text-center text-primary" id="offcanvasNavbarLabel">Opciones</h5>
+</div>
+
+
+  <div class="offcanvas-body">
+    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+      <li *ngFor="let option of options" class="nav-item">
+        <a class="btn w-100 text-start mx-2 mb-2 border-0 border-bottom hover-btn-nav" [routerLink]="option.link">{{ option.label }}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="offcanvas-body d-flex flex-column">
+    <div *ngIf="usuarioActual" class="d-flex align-items-center mt-auto">
+      <a class="btn w-100 text-start mx-2 mb-2 border-0 border-bottom hover-btn-nav" (click)="logout()">
+        <i class="bi bi-box-arrow-right me-2"></i> <!-- Ícono de salir -->
+        Cerrar sesión
+      </a>
+    </div>
+  </div>
+</nav>

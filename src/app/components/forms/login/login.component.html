@@ -1,0 +1,47 @@
+<!-- Main Content -->
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <!-- Login Form Section -->
+        <div class="col-md-8 col-xs-12 col-sm-12 bg-white p-2 rounded-end">
+            <div class="container-fluid">
+                <!-- Título -->
+                <div class="row mb-2">
+                    <h2 class="text-center text-primary">Accede a tu experiencia personalizada</h2>
+                </div>
+
+                <!-- Formulario de login -->
+                <div class="row mb-4">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <!-- Campo Usuario -->
+                        <div class="mb-3">
+                          <label for="email" class="form-label">Email o Telefono</label>
+                          <input type="text" formControlName="email" id="email" class="form-control" placeholder="email@ejemplo.com | +54 1234567890">
+                          <div *ngIf="submitted && loginForm.get('email')?.invalid" class="text-danger">
+                            Email no valido 
+                          </div>
+                        </div>
+                      
+                        <!-- Campo Contraseña -->
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Contraseña</label>
+                          <input type="password" formControlName="contrasena" id="password" class="form-control" placeholder="Contraseña">
+                          <div *ngIf="submitted && loginForm.get('contrasena')?.invalid" class="text-danger">
+                            La contraseña es obligatoria.
+                          </div>
+                        </div>
+                      
+                        <!-- Botón de inicio de sesión -->
+                        <div class="mb-3 text-center">
+                          <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+                        </div>
+                      </form>
+                </div>
+
+                <!-- Enlace de registro -->
+                <div class="row mt-4">
+                    <p class="text-center">¿Es tu primera vez? <a href="/register">Registrarse</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

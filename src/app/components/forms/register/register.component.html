@@ -1,0 +1,153 @@
+<!-- Main Content -->
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <!-- Registro Form Section -->
+        <div class="col-md-8 col-xs-12 col-sm-12 bg-white p-2 rounded-end">
+            <div class="container-fluid">
+                <!-- Título -->
+                <div class="row mb-2">
+                    <h2 class="text-center text-primary">Crea tu cuenta</h2>
+                </div>
+
+                <!-- Formulario de registro -->
+                <div class="row mb-4">
+                    <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                        <div class="row">
+                            <!-- Columna Izquierda -->
+                            <div class="col-md-6">
+                                <!-- Campo Email -->
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" id="email" formControlName="email" class="form-control"
+                                        placeholder="email@ejemplo.com" />
+                                    <div *ngIf="submitted && registerForm.get('email')?.invalid" class="text-danger">
+                                        El email no es válido.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Teléfono -->
+                                <div class="mb-3">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" id="telefono" formControlName="telefono" class="form-control"
+                                        placeholder="+54 1234567890" />
+                                    <div *ngIf="submitted && registerForm.get('telefono')?.invalid" class="text-danger">
+                                        El teléfono debe ser un número válido.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Contraseña -->
+                                <div class="mb-3">
+                                    <label for="contrasena" class="form-label">Contraseña</label>
+                                    <input type="password" id="contrasena" formControlName="contrasena"
+                                        class="form-control" placeholder="Contraseña" />
+                                    <div *ngIf="submitted && registerForm.get('contrasena')?.hasError('required')"
+                                        class="text-danger">
+                                        La contraseña es obligatoria.
+                                    </div>
+                                    <div *ngIf="submitted && registerForm.get('contrasena')?.hasError('minlength')"
+                                        class="text-danger">
+                                        La contraseña debe tener al menos 8 caracteres.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Confirmar Contraseña -->
+                                <div class="mb-3">
+                                    <label for="confirmarcontrasena" class="form-label">Confirmar Contraseña</label>
+                                    <input type="password" id="confirmarcontrasena"
+                                        formControlName="confirmarcontrasena" class="form-control"
+                                        placeholder="Confirmar contraseña" />
+                                    <div *ngIf="submitted && registerForm.get('confirmarcontrasena')?.hasError('required')"
+                                        class="text-danger">
+                                        La confirmación de la contraseña es obligatoria.
+                                    </div>
+                                </div>
+                                <div *ngIf="submitted && registerForm.hasError('contrasenaMismatch')"
+                                    class="text-danger">
+                                    Las contraseñas no coinciden.
+                                </div>
+                            </div>
+
+                            <!-- Columna Derecha -->
+                            <div class="col-md-6">
+                                <!-- Campo Nombre -->
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" id="nombre" formControlName="nombre" class="form-control"
+                                        placeholder="Tu nombre" />
+                                    <div *ngIf="submitted && registerForm.get('nombre')?.invalid" class="text-danger">
+                                        El nombre es obligatorio.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Apellido -->
+                                <div class="mb-3">
+                                    <label for="apellido" class="form-label">Apellido</label>
+                                    <input type="text" id="apellido" formControlName="apellido" class="form-control"
+                                        placeholder="Tu apellido" />
+                                    <div *ngIf="submitted && registerForm.get('apellido')?.invalid" class="text-danger">
+                                        El apellido es obligatorio.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Fecha de Nacimiento -->
+                                <div class="mb-3">
+                                    <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                                    <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento"
+                                        class="form-control" />
+                                    <div *ngIf="submitted && registerForm.get('fechaNacimiento')?.invalid"
+                                        class="text-danger">
+                                        La fecha de nacimiento es obligatoria.
+                                    </div>
+                                    <div *ngIf="submitted && registerForm.hasError('invalidBirthDate')"
+                                        class="text-danger">
+                                        La fecha de nacimiento debe ser menor o igual a la fecha actual.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Tipo de Documento -->
+                                <div class="mb-3">
+                                    <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
+                                    <select id="tipoDocumento" formControlName="tipoDocumento" class="form-control">
+                                        <option value="dni">DNI</option>
+                                        <option value="pasaporte">Pasaporte</option>
+                                    </select>
+                                    <div *ngIf="submitted && registerForm.get('tipoDocumento')?.invalid"
+                                        class="text-danger">
+                                        El tipo de documento es obligatorio.
+                                    </div>
+                                </div>
+
+                                <!-- Campo Documento -->
+                                <div class="mb-3">
+                                    <label for="documento" class="form-label">Número de Documento</label>
+                                    <input type="number" id="documento" formControlName="documento" class="form-control"
+                                        placeholder="Número de Documento" />
+                                    <div *ngIf="submitted && registerForm.get('documento')?.invalid"
+                                        class="text-danger">
+                                        El número de documento es obligatorio y debe ser numérico.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Errores generales -->
+                        <div *ngIf="submitted && registerForm.hasError('atLeastOneRequired')"
+                            class="alert alert-danger">
+                            Debe proporcionar al menos un email o un número de teléfono.
+                        </div>
+
+                        <!-- Botón de registro -->
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Enlace a inicio de sesión -->
+                <div class="row mt-4">
+                    <p class="text-center">¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
