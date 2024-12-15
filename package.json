@@ -2,10 +2,10 @@
   "name": "appointman-frontend",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
+    "prestart": "node env-config.js",
+    "prebuild": "node env-config.js",
     "start": "ng serve",
     "build": "ng build",
-    "start:dev": "ng serve --watch --configuration development",
     "test": "ng test",
     "serve:ssr:appointman-frontend": "node dist/appointman-frontend/server/server.mjs"
   },
@@ -24,6 +24,7 @@
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
     "moment": "^2.30.1",
     "rxjs": "~7.8.0",
