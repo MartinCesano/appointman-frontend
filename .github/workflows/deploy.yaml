@@ -1,0 +1,32 @@
+name: Desplegar en Azure
+
+on:
+  push:
+    branches:
+      - main  # Ejecutar solo en la rama main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Obtener el código del repositorio
+      uses: actions/checkout@v2
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Instalar dependencias
+      run: npm install
+
+    - name: Construir la aplicación Angular
+      run: npm run build --prod
+
+    - name: Desplegar a Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+        package: './dist/appointman-frontend'
