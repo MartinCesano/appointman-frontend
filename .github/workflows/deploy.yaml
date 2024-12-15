@@ -24,7 +24,7 @@ jobs:
       - name: Set environment variables
         run: |
           echo "API_URL_PROD=${{ secrets.API_URL_PROD }}" >> $GITHUB_ENV  # Cargar la URL de producción desde los secrets
-          echo "NODE_ENV=production" >> $GITHUB_ENV  # Definir el entorno como 'production'
+          echo "NODE_ENV=prod" >> $GITHUB_ENV  # Definir el entorno como 'production'
 
 
       # Paso 4: Instalar las dependencias del proyecto
