@@ -1,50 +1,43 @@
-name: Build and Deploy Angular App
+name: Build and Publish Docker Image
 
 on:
   push:
-    branches:
-      - main  # Se ejecutará solo en la rama principal
+    branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # El entorno donde se ejecutará el trabajo
+  build-and-push:
+    runs-on: ubuntu-latest
 
     steps:
-      # Paso 1: Descargar el código del repositorio
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Paso 2: Configurar Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
         with:
-          node-version: '18'  # La versión mínima requerida por Angular CLI
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      # Paso 3: Configurar las variables de entorno desde los secrets de GitHub
-      - name: Set environment variables
-        run: |
-          echo "API_URL_PROD=${{ secrets.API_URL_PROD }}" >> $GITHUB_ENV  # Cargar la URL de producción desde los secrets
-          echo "NODE_ENV=prod" >> $GITHUB_ENV  # Definir el entorno como 'production'
+      - name: Create .env file
+        run: echo "${{ secrets.ENV }}" | base64 -d > .env
 
+      - name: Build and tag Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/appointman-frontend:latest .
 
-      # Paso 4: Instalar las dependencias del proyecto
-      - name: Install dependencies
-        run: npm install
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/appointman-frontend:latest
 
-      # Paso 5: Ejecutar el script que genera el archivo de configuración de entornos
-      - name: Generate environment config
-        run: node env-config.js  # Ejecutar el script para generar el archivo environment.ts
+      - name: Update image metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/appointman-frontend
+          tags: |
+            latest
+            ${{ github.sha }}
 
-      # Paso 6: Ejecutar el build de Angular
-      - name: Run build
-        run: npm run build  # Construir la aplicación con Angular CLI
-
-      # Paso 7: (Opcional) Desplegar la aplicación a Azure, si ya tienes configurado el despliegue en Azure
-      # Aquí iría el paso para hacer el despliegue, por ejemplo usando Azure Web App Deployment
-      - name: Deploy to Azure
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # Secreto con el perfil de publicación de Azure
-          package: ./dist/appointman-frontend  # Ruta a la carpeta de salida del build
-
+          app-name: Appointman
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/appointman-frontend:latest
