@@ -46,5 +46,5 @@ jobs:
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # Secreto con el perfil de publicación de Azure
-          package: ./dist  # Ruta a la carpeta de salida del build
+          package: ./dist/appointman-frontend  # Ruta a la carpeta de salida del build
 
