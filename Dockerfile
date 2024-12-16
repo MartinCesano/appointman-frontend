@@ -10,6 +10,8 @@ COPY package*.json ./
 # Copiar el archivo .env al contenedor
 COPY .env ./
 
+# Indicar que es el entorno de produccion
+ENV NODE_ENV=prod
 
 # Instalar dependencias
 RUN npm install
