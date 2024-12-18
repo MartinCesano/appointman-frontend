@@ -62,7 +62,6 @@ export class AuthService {
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      alert('Error al loguearse');
       throw error
     }
   }
