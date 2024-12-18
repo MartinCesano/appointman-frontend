@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 
 export function atLeastOneRequiredValidator(group: FormGroup): ValidationErrors | null {
@@ -29,4 +29,28 @@ export function passwordsMatchValidator(group: FormGroup): { [key: string]: bool
         return { contrasenaMismatch: true }; // Usa 'contrasenaMismatch' como error
     }
     return null;
+}
+
+
+export function emailOrPhoneValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) {
+      return null;
+    }
+
+    // Expresión regular para validar el correo electrónico
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Expresión regular para validar el número de teléfono (formato internacional)
+    const phonePattern = /^\+?[1-9]\d{1,14}$/;
+
+    const isValidEmail = emailPattern.test(value);
+    const isValidPhone = phonePattern.test(value);
+
+    if (!isValidEmail && !isValidPhone) {
+      return { emailOrPhone: true };
+    }
+
+    return null;
+  };
 }

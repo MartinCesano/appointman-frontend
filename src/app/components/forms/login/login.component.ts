@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { emailOrPhoneValidator } from '../../../validators/validators';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent {
     private router: Router
   ) { 
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.email],
+      identificador: ['', [Validators.required, emailOrPhoneValidator()]],
       contrasena: ['', Validators.required]
     });
 
