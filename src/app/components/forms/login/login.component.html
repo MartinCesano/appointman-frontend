@@ -14,10 +14,10 @@
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <!-- Campo Usuario -->
                         <div class="mb-3">
-                          <label for="email" class="form-label">Email o Telefono</label>
-                          <input type="text" formControlName="email" id="email" class="form-control" placeholder="email@ejemplo.com | +54 1234567890">
-                          <div *ngIf="submitted && loginForm.get('email')?.invalid" class="text-danger">
-                            Email no valido 
+                          <label for="identificador" class="form-label">Email o Telefono</label>
+                          <input type="text" formControlName="identificador" id="identificador" class="form-control" placeholder="email@ejemplo.com | 541234567890">
+                          <div *ngIf="submitted && loginForm.get('identificador')?.invalid" class="text-danger">
+                            Email o Telefono no valido 
                           </div>
                         </div>
                       
