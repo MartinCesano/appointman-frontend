@@ -15,7 +15,7 @@ export class AlertService {
       icon: 'success',
       title: title,
       text: message,
-      timer: 1500,
+      timer: 2000,
       showConfirmButton: false
     });
   }
@@ -26,7 +26,7 @@ export class AlertService {
       icon: 'error',
       title: title,
       text: message,
-      timer: 1500,
+      timer: 2000,
       showConfirmButton: false
     });
   }
@@ -37,18 +37,18 @@ export class AlertService {
       icon: 'warning',
       title: title,
       text: message,
-      timer: 1500,
+      timer: 2000,
       showConfirmButton: false
     });
   }
 
   // Método para mostrar alertas de información
-  showInfo(message: string, title: string = 'Información') {
+  alertInfo(message: string, title: string = 'Información') {
     Swal.fire({
       icon: 'info',
       title: title,
       text: message,
-      timer: 1500,
+      timer: 2000,
       showConfirmButton: false
     });
   }

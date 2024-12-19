@@ -42,6 +42,7 @@ export class LoginComponent {
       this.alertService.alertExito( 'Sesión iniciada con éxito','Bienvenido');
       this.router.navigate(['/home']);
     } catch (error: any) {
+      this.authService.logout();
       this.alertService.alertError(error.response?.data?.message || 'Hubo un problema al iniciar sesión');
      
     }

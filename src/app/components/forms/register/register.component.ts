@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, AbstractContro
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { atLeastOneRequiredValidator, birthDateValidator, passwordsMatchValidator } from '../../../validators/validators';
+import { AlertService } from '../../shared/alert/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,8 @@ export class RegisterComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router, 
+    private	alertService: AlertService
   ) {
     this.registerForm = this.formBuilder.group(
       {
@@ -69,10 +71,10 @@ export class RegisterComponent {
         throw new Error('El formulario no es válido. Por favor, revise los campos e intente nuevamente.');
       }
       await this.authService.register(registerDTO);
-      alert('Registro exitoso');
+      this.alertService.alertExito('Ya puedes iniciar sesion', 'Registro Existoso');
       this.router.navigate(['/login']);
     } catch (error: any) {
-      alert(error.error.message);
+      this.alertService.alertError(error.response?.data?.message, 'Error al Registrarse')
     }
   }
 }
