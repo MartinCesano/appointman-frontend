@@ -1,0 +1,32 @@
+/* src/app/components/shared/alert/alert-styles.css */
+.swal2-popup {
+    border-radius: 30px !important;  /* Aumenta el borde redondeado */
+    padding: 25px !important;        /* Ajusta el padding */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);  /* Sombra sutil */
+  }
+  
+  .swal2-title {
+    font-size: 26px !important;  /* Aumenta el tamaño del título */
+    font-weight: bold !important; /* Resalta el título */
+  }
+  
+  .swal2-text {
+    font-size: 18px !important;  /* Tamaño del texto */
+    font-family: 'Arial', sans-serif !important; /* Establece una fuente más legible */
+  }
+  
+  .swal2-icon {
+    border-radius: 50% !important;  /* Redondea el icono */
+  }
+  
+  .swal2-confirm {
+    border-radius: 20px !important; /* Redondea los botones de confirmación */
+    padding: 8px 20px !important;  /* Ajusta el padding del botón */
+    color: white !important;        /* Color del texto del botón */
+  }
+  
+  .swal2-cancel {
+    border-radius: 20px !important; /* Redondea los botones de cancelación */
+    padding: 8px 20px !important;  /* Ajusta el padding del botón */
+  }
+  

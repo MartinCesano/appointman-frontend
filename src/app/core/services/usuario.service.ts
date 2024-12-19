@@ -4,13 +4,17 @@ import axios from 'axios';
 import { environment } from '../../../environments/environment';
 import { UsuarioDTO } from '../../models/usuario.dt';
 import { AuthService } from '../auth/auth.service';
+import { AlertService } from '../../components/shared/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService, 
+    private alertService: AlertService
+  ) { }
 
   // Método para obtener los datos del usuario logueado
   async getUser(): Promise<UsuarioDTO | null> {
@@ -29,8 +33,9 @@ export class UsuarioService {
       // Guardamos la información del usuario en el localStorage
       localStorage.setItem('user', JSON.stringify(response.data));
       return response.data;
-    } catch (error) {
-      alert('Error al obtener los datos del usuario:');
+    } catch (error:any) {
+      this.authService.logout();
+      this.alertService.alertError(error.response?.data?.message, 'Error');
       return null;
     }
   }

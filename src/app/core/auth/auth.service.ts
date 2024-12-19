@@ -8,6 +8,7 @@ import { LoginDTO } from '../../models/login.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TokenDTO } from '../../models/token.dto';
 import { UsuarioDTO } from '../../models/usuario.dt';
+import { AlertService } from '../../components/shared/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,9 @@ export class AuthService {
   // Observable público para que los componentes lo observen
   usuarioActual$: Observable<UsuarioDTO | null> = this.usuarioActualSubject.asObservable();
 
-  constructor() {
+  constructor(
+    private alertService: AlertService
+  ) {
     this.restoreSession(); // Restaurar sesión al inicializar
   }
 
@@ -34,7 +37,7 @@ export class AuthService {
         const usuario = await this.getUser(); // Obtén los datos del usuario
         this.setUsuarioActual(usuario);
       } catch (error) {
-        alert('Error al restaurar la sesión:');
+        this.alertService.alertInfo('Debe iniciar sesion nuevamente', 'Sesión expirada');
         this.logout();
       }
     }
@@ -45,7 +48,6 @@ export class AuthService {
       const response = await axios.post(`${environment.apiUrl}/auth/register`, body);
       return response.data;
     } catch (error) {
-      alert('Error al registrarse');
       throw error
     }
   }
@@ -62,7 +64,6 @@ export class AuthService {
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      alert('Error al loguearse');
       throw error
     }
   }
@@ -100,7 +101,8 @@ export class AuthService {
       localStorage.setItem('token', JSON.stringify(tokenObject));
       this.scheduleTokenRefresh(response.expirationTime); // Ejecuta la función del refresh token para iniciar un nuevo ciclo
     } catch (error) {
-      alert('Error al refrescar el token');
+      this.alertService.alertError('Debe iniciar sesion nuevamente', 'Sesión expirada'); 
+      this.logout();
       throw new HttpErrorResponse({ error });
     }
   }
@@ -116,7 +118,8 @@ export class AuthService {
         await this.refreshToken();
       });
     } else {
-      console.error('El token está expirado');
+      this.alertService.alertError('Debe iniciar sesion nuevamente', 'Sesión expirada');
+      this.logout();
     }
   }
 
